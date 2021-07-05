@@ -1,5 +1,7 @@
 # Instagram Clone Coding with nest
 
+![Heroku](https://heroku-badge.herokuapp.com/?app=d0lim-insta-clone)
+
 ## CI/CD
 
 This repository's main branch is being deployed through heroku.  
