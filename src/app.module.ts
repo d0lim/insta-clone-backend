@@ -3,8 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
 import { CatsModule } from './cats/cats.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
