@@ -33,6 +33,7 @@
     "@nestjs/swagger": "^5.0.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "dotenv": "^10.0.0",
     "fastify-swagger": "^4.8.2",
     "mongoose": "^5.13.2",
     "passport": "^0.4.1",
