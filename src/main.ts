@@ -10,7 +10,7 @@ import { setupSwagger } from './util/setupSwagger';
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({ logger: true }),
+    new FastifyAdapter(),
   );
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
