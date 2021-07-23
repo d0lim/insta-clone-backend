@@ -1,6 +1,6 @@
 # Instagram Clone Coding with nest
 
-[![Heroku](https://heroku-badge.herokuapp.com/?app=d0lim-insta-clone)](https://d0lim-insta-clone.herokuapp.com/)
+[Demo](https://d0lim-insta-clone.herokuapp.com/)
 
 ## CI/CD
 
