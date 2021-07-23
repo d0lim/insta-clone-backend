@@ -1,8 +1,7 @@
-import { Controller, Post, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Request, UseGuards } from '@nestjs/common';
 import {
   ApiBody,
   ApiCreatedResponse,
-  ApiOkResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';

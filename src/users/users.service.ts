@@ -20,6 +20,5 @@ export class UsersService {
 
   async findOne(email: string): Promise<User | undefined> {
     return this.userModel.findOne({ email });
-    // return this.dummyUsers.find((user) => user.username === username);
   }
 }
