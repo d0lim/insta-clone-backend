@@ -1,10 +1,25 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
 @Controller('users')
+@ApiTags('Users API')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -18,5 +33,16 @@ export class UsersController {
   @ApiCreatedResponse({ description: 'New user created!' })
   async create(@Body() userData: CreateUserDto): Promise<User> {
     return this.usersService.create(userData);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  @ApiOperation({
+    summary: `Get profile. (Authorization Needed!!)`,
+    description: `Get profile about user logged in. Do not forget to authorize your token before executing this api.`,
+  })
+  getProfile(@Request() req) {
+    return req.user;
   }
 }

@@ -11,6 +11,7 @@ export function setupSwagger(app: INestApplication): void {
     .setTitle('Insta-Clone nestjs API Docs')
     .setDescription('Insta-Clone nestjs API Docs')
     .setVersion('1.0.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
