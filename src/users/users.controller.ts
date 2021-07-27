@@ -2,18 +2,17 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
+  Param,
   Post,
-  UseGuards,
-  Request,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
@@ -35,14 +34,16 @@ export class UsersController {
     return this.usersService.create(userData);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @Get(':nickname')
   @ApiOperation({
-    summary: `Get profile. (Authorization Needed!!)`,
-    description: `Get profile about user logged in. Do not forget to authorize your token before executing this api.`,
+    summary: `Get profile with nickname`,
+    description: `Get profile about user with certain nickname.`,
   })
-  getProfile(@Request() req) {
-    return req.user;
+  async getProfile(@Param('nickname') nickname) {
+    const user = await this.usersService.findOne({ nickname });
+    if (user === null) {
+      throw new HttpException('No such user', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 }

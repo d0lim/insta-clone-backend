@@ -5,6 +5,11 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 
+type findOneParams = {
+  email?: string;
+  nickname?: string;
+};
+
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
@@ -18,7 +23,10 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async findOne(email: string): Promise<User | undefined> {
-    return this.userModel.findOne({ email });
+  async findOne({ email, nickname }: findOneParams): Promise<User | undefined> {
+    if (email !== undefined) return this.userModel.findOne({ email });
+    else if (nickname !== undefined)
+      return this.userModel.findOne({ nickname }).select('-password');
+    else return undefined;
   }
 }

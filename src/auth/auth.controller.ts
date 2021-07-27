@@ -1,5 +1,6 @@
-import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiOperation,
@@ -8,12 +9,24 @@ import {
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LogInDto } from './dto/login.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
 @ApiTags('Auth API')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  @ApiOperation({
+    summary: `Get Auth info. (Authorization Needed!!)`,
+    description: `Get profile about user logged in. Do not forget to authorize your token before executing this api.`,
+  })
+  getProfile(@Request() req) {
+    return req.user;
+  }
 
   @UseGuards(LocalAuthGuard)
   @Post()
