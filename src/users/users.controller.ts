@@ -4,8 +4,11 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Logger,
   Param,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -13,14 +16,23 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { AllowAny } from 'src/util/allowAny';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
+
+type ProfileResponse = {
+  user?: any;
+  profile: User;
+};
 
 @Controller('users')
 @ApiTags('Users API')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  private readonly logger = new Logger(UsersController.name);
 
   @Post()
   @ApiOperation({
@@ -35,15 +47,20 @@ export class UsersController {
   }
 
   @Get(':nickname')
+  @AllowAny()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({
     summary: `Get profile with nickname`,
     description: `Get profile about user with certain nickname.`,
   })
-  async getProfile(@Param('nickname') nickname) {
-    const user = await this.usersService.findOne({ nickname });
-    if (user === null) {
-      throw new HttpException('No such user', HttpStatus.NOT_FOUND);
+  async getProfile(
+    @Req() req,
+    @Param('nickname') nickname,
+  ): Promise<ProfileResponse> {
+    const profile = await this.usersService.findOne({ nickname });
+    if (profile === null) {
+      throw new HttpException('No such profile', HttpStatus.NOT_FOUND);
     }
-    return user;
+    return { user: req.user || undefined, profile };
   }
 }
